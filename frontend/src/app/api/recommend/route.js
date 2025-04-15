@@ -11,8 +11,11 @@ import { spawn } from 'child_process';
 export async function POST(req){
     try {
         const body = await req.json();
+
+        console.log('Received from SpendPage:', body);
+
         const pythonProcess = spawn('python', [
-            '../../../recommender/recommend.py',
+            '../../../../../backend/recommend.py',
             JSON.stringify(body),
         ]);
 
@@ -26,12 +29,16 @@ export async function POST(req){
             errorOutput += chunk;
         }
 
+        console.log('Raw Python output:', output);       // <-- Debug
+        console.log('Raw Python errors:', errorOutput); // <-- Debug
+
         if (errorOutput){
             console.error(errorOutput);
             return NextResponse.json({ error: errorOutput }, { status: 500 });
         }
 
         const recommendations = JSON.parse(output); // Parse the JSON from Python
+        console.log('Parsed Recommendations:', recommendations); // <-- Debug
 
         return NextResponse.json(recommendations); // Return JSON to the frontend
     } catch (err) {

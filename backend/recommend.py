@@ -55,6 +55,8 @@ def main():
     # Load the JSON from stdin or from sys.argv
     data = json.loads(sys.argv[1])
 
+    print("DEBUG: Received data ->", data, file=sys.stderr) # goes to stderr
+
     # Convert strings to int
     groceries = int(data["groceries"])
     dining = int(data["dining"])
@@ -63,6 +65,9 @@ def main():
 
     # Recommendation
     recommend = recommend_cards(groceries, dining, gas, travel)
+
+    print("DEBUG: Recommended ->", recommend, file=sys.stderr)
+
     print(json.dumps(recommend, indent=2))
 
 
